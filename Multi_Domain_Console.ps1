@@ -1,7 +1,6 @@
 [cmdletbinding()]
 param()
-function Show-Menu
-{
+function Show-Menu {
     param (
         [string]$Title = 'Menu',
         [Parameter(Mandatory=$true)]
