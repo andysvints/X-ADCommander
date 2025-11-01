@@ -1,0 +1,7 @@
+Menu_Item,Function
+"Reset Password" ,"Reset-Password"
+"New Admin User" , New_Admin_User
+"Add User to Group","Add_User_to_Group"
+"Exit to AD drive prompt", "Exit_to_AD_drive_prompt"
+"Go back to Domains menu", "Go_back_to_Domains_menu"
+"New Service Account in a New OU", "New_Service_Account_in_a_New_OU"
