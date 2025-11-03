@@ -3,12 +3,8 @@
 function ResetUserPassword {
         param ([Parameter(Mandatory=$true)][string]$Domain)
             # ensure authentication with the domain is still valid
-        try {
-            Get-ADDomain $Domain -ErrorAction Stop
-        }
-        catch {
-            $ErrorDetails = $_.Exception.Message
-            Write-Error "Connection with the domain $Domain failed, ErrorDetails: $ErrorDetails.`nexit and start over again"
+        if (-not (Test-ADDrive -Domain $Domain)) {
+            "Connection with the domain $Domain failed, ErrorDetails: $ErrorDetails.`nexit and start over again"
             exit
         }
         $Username = read-host -Prompt "Username"
@@ -27,6 +23,6 @@ function ResetUserPassword {
         }
         catch {
             $ErrorDetails = $_.Exception.Message
-            Write-Error "Password reset failed for $Username in $Domain. ErrorDetails: $ErrorDetails"
+            "Password reset failed for $Username in $Domain. ErrorDetails: $ErrorDetails"
         }
 }

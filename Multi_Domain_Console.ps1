@@ -12,11 +12,11 @@ $Options = [string[]]$DomainControllerIP.keys
 while ($true) {
     #Clear-Host -Force
     $Option = Show-Menu -Title 'Domains' -Choices $Options
-    if ($Option -eq 0) { break }
+    if ($Option -eq 0) { exit }
     $Domain = $Options[$Option - 1]
     # Determine if we can use an existing AD drive and that drive authentication with the domain is still valid
-    if ((Get-PSDrive $Domain -PSProvider ActiveDirectory -ea SilentlyContinue) -and ((Get-ADDomain).Name -eq $Domain)) {
-        $MYADDriveName = $Domain + ":\"
+    if (Test-ADDrive -Domain $Domain) {
+        $MYADDriveName = $Domain + ':\'
     }
     else {
         $Server = $DomainControllerIP.$Domain
@@ -28,7 +28,7 @@ while ($true) {
         }
         catch {
             $ErrorDetails = $_.Exception.Message
-            Write-Error "AD drive creation failed for $($Credential.Username) in $Domain. ErrorDetails: $ErrorDetails"
+             "AD drive creation failed for $($Credential.Username) in $Domain. ErrorDetails: $ErrorDetails"
             $Confirm = Read-Host -Prompt "Type 'y' if you want to try again or type anything else to exit"
             if ($Confirm -notin 'y', 'Y') {
                 exit
@@ -60,7 +60,7 @@ while ($true) {
                 default { Write-Warning "Unknown Option: $SelectedMenuID" }
             }
         } until (
-            ((read-host -Prompt "Type 'y' if you want to use `"$SelectedMenu`" again in $Domain domain or type anything else to go back to Actions menu") -notin 'y', 'Y')
+            ((read-host -Prompt "`nType 'y' if you want to use `"$SelectedMenu`" again in $Domain domain or type anything else to go back to Actions menu") -notin 'y', 'Y')
         )
     }
 }
