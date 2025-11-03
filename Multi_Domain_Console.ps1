@@ -10,11 +10,12 @@ $Options = [string[]]$DomainControllerIP.keys
 
 :MainMenuExitLabel
 while ($true) {
-    Clear-Host -Force
+    #Clear-Host -Force
     $Option = Show-Menu -Title 'Domains' -Choices $Options
     if ($Option -eq 0) { break }
     $Domain = $Options[$Option - 1]
-    if (Get-PSDrive $Domain -PSProvider ActiveDirectory -ea SilentlyContinue) {
+    # Determine if we can use an existing AD drive and that drive authentication with the domain is still valid
+    if ((Get-PSDrive $Domain -PSProvider ActiveDirectory -ea SilentlyContinue) -and ((Get-ADDomain).Name -eq $Domain)) {
         $MYADDriveName = $Domain + ":\"
     }
     else {
@@ -44,17 +45,16 @@ while ($true) {
     $Actions = [string[]]$Level_2_Menus.Values
     :SubMenuExitLabel
     while ($true) {
-        clear-host -Force
+        #clear-host -Force
         $SelectedMenuID = Show-Menu -Title "Actions for Domain:$Domain" -Choices $Actions
         if ($SelectedMenuID -eq 0) { break MainMenuExitLabel }
-        "SelectedMenuID = $SelectedMenuID"
         $SelectedMenu = $Level_2_Menus[$SelectedMenuID - 1]
         do { 
             switch ($SelectedMenuID) {
-                1 { Reset-Password }
-                2 { New-Admin-User }
-                3 { Add-User-to-Group }
-                4 { New-Service-Account-in-a-New-OU }
+                1 { ResetUserPassword $Domain}
+                2 { New-Admin-User $Domain}
+                3 { AddGroupMember $Domain}
+                4 { New-Service-Account-in-a-New-OU $Domain}
                 5 { break SubMenuExitLabel }
                 6 { Exit }
                 default { Write-Warning "Unknown Option: $SelectedMenuID" }

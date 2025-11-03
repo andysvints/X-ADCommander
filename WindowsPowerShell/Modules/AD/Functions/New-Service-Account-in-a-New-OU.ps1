@@ -11,7 +11,7 @@ function New-Service-Account-in-a-New-OU {
         Write-Host "OU creation succeeded for OU $OUName in $Domain." -ForegroundColor Green
     }
     catch {
-        $ErrorDetails = $_.Exception.ToString()
+        $ErrorDetails = $_.Exception.Message
         Write-Error "OU creation failed for $OUName in $Domain. ErrorDetails: $ErrorDetails"
     }
     try {
@@ -32,7 +32,7 @@ function New-Service-Account-in-a-New-OU {
         Write-Host "Account creation succeeded for $Username in $Domain." -ForegroundColor Green
     }
     catch {
-        $ErrorDetails = $_.Exception.ToString()
+        $ErrorDetails = $_.Exception.Message
         Write-Error "Service Account creation failed for $Username in $Domain. ErrorDetails: $ErrorDetails"
     }
 }

@@ -25,7 +25,7 @@ function New-Admin-User {
         Write-Host "Account creation succeeded for $Username in $Domain." -ForegroundColor Green
     }
     catch {
-        $ErrorDetails = $_.Exception.ToString()
+        $ErrorDetails = $_.Exception.Message
         Write-Error "Account creation failed for $Username in $Domain. ErrorDetails: $ErrorDetails"
     }
 }

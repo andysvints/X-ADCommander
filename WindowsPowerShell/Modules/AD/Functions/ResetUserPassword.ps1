@@ -1,0 +1,32 @@
+
+# Reset-Password.ps1
+function ResetUserPassword {
+        param ([Parameter(Mandatory=$true)][string]$Domain)
+            # ensure authentication with the domain is still valid
+        try {
+            Get-ADDomain $Domain -ErrorAction Stop
+        }
+        catch {
+            $ErrorDetails = $_.Exception.Message
+            Write-Error "Connection with the domain $Domain failed, ErrorDetails: $ErrorDetails.`nexit and start over again"
+            exit
+        }
+        $Username = read-host -Prompt "Username"
+        "`n"; Write-Warning "Setting password for $Username in $Domain ..............`n"
+        try {
+            Get-ADUser $Username -Properties mobile, PasswordLastSet, PasswordNeverExpires, PasswordExpired, msDS-UserPasswordExpiryTimeComputed -OutVariable Useraccount -ErrorAction Stop |
+                Select mobile, PasswordLastSet, PasswordNeverExpires, PasswordExpired, @{Name = "PasswordExpiryDate"; Expression = { [datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed") } }
+            $Password = read-host -Prompt "Password" -AsSecureString
+            $Confirm = Read-Host -Prompt "Are you sure you want to reset the password for $Username in $Domain ?`n Type 'y' or 'Y' to continue"
+            if ($Confirm -notin 'y', 'Y') {
+                continue
+            }
+            $Useraccount | Set-ADAccountPassword -NewPassword $Password -Reset -ErrorAction Stop
+            Write-Host "Password reset succeeded for $Username in $Domain." -ForegroundColor Green
+            # Now send SMS with new creds
+        }
+        catch {
+            $ErrorDetails = $_.Exception.Message
+            Write-Error "Password reset failed for $Username in $Domain. ErrorDetails: $ErrorDetails"
+        }
+}
