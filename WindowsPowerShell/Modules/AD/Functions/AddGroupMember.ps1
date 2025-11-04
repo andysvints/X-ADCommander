@@ -2,7 +2,7 @@ function AddGroupMember {
     param ([Parameter(Mandatory = $true)][string]$Domain)
     # ensure authentication with the domain is still valid
     if (-not (Test-ADDrive -Domain $Domain)) {
-        Write-Host "Connection with the domain $Domain failed, ErrorDetails: $ErrorDetails.`nexit and start over again" -ForegroundColor Red
+        Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
         exit
     }
     

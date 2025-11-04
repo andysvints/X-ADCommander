@@ -53,7 +53,7 @@ function New-ADDrive {
             Write-error -Message "Unable to create an Active Directory drive because no online Domain Controller was reachable." -ErrorAction Stop
             Return
         }
-        Import-Module ActiveDirectory -Force -WarningAction SilentlyContinue
+        #Import-Module ActiveDirectory -Force -WarningAction SilentlyContinue
         try {
             $DomainRoot = (Get-ADDomain -Server $Server -Credential $Credential).DistinguishedName # TAKING FOREVER :( :( :)
             $ADDriveName = (Get-ADDomain -Server $Server -Credential $Credential).Name
