@@ -1,4 +1,10 @@
-function New-Service-Account-in-a-New-OU {
+function NewServiceAccountInNewOU {
+    param ([Parameter(Mandatory = $true)][string]$Domain)
+    # ensure authentication with the domain is still valid
+    if (-not (Test-ADDrive -Domain $Domain)) {
+        Write-Host "Connection with the domain $Domain failed, ErrorDetails: $ErrorDetails.`nexit and start over again" -ForegroundColor Red
+        exit
+    }
     $DomainDNRoot = $MYADDrive.RootWithoutAbsolutePathToken
     $OUPath = 'OU=Service Accounts,' + $DomainDNRoot
     $Username = read-host -Prompt "Service Account Username"
@@ -12,7 +18,7 @@ function New-Service-Account-in-a-New-OU {
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Error "OU creation failed for $OUName in $Domain. ErrorDetails: $ErrorDetails"
+        Write-Host "OU creation failed for $OUName in $Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
     try {
         New-ADUser -Name $UserName `
@@ -33,6 +39,6 @@ function New-Service-Account-in-a-New-OU {
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Error "Service Account creation failed for $Username in $Domain. ErrorDetails: $ErrorDetails"
+        Write-Host "Service Account creation failed for $Username in $Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }

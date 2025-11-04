@@ -1,5 +1,11 @@
 
-function New-Admin-User {
+function NewAdminUser {
+    param ([Parameter(Mandatory = $true)][string]$Domain)
+    # ensure authentication with the domain is still valid
+    if (-not (Test-ADDrive -Domain $Domain)) {
+        Write-Host "Connection with the domain $Domain failed, ErrorDetails: $ErrorDetails.`nexit and start over again" -ForegroundColor Red
+        exit
+    }
     $Username = read-host -Prompt "Username"
     $Password = read-host -Prompt "Password" -AsSecureString
     $Description = read-host -Prompt "Description"
@@ -26,6 +32,6 @@ function New-Admin-User {
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Error "Account creation failed for $Username in $Domain. ErrorDetails: $ErrorDetails"
+        Write-Host "Account creation failed for $Username in $Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }

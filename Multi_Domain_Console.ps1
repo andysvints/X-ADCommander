@@ -52,9 +52,9 @@ while ($true) {
         do { 
             switch ($SelectedMenuID) {
                 1 { ResetUserPassword $Domain}
-                2 { New-Admin-User $Domain}
+                2 { NewAdminUser $Domain}
                 3 { AddGroupMember $Domain}
-                4 { New-Service-Account-in-a-New-OU $Domain}
+                4 { NewServiceAccountInNewOU $Domain}
                 5 { break SubMenuExitLabel }
                 6 { Exit }
                 default { Write-Warning "Unknown Option: $SelectedMenuID" }
