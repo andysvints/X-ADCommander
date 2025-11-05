@@ -5,7 +5,8 @@ function Test-ADDrive {
     )
     try {
         Get-PSDrive -Name $Domain -PSProvider ActiveDirectory -ErrorAction Stop | Out-Null
-        Get-ADDomain $Domain -ErrorAction Stop | Out-Null
+        $ADDriveName = $Domain + ':\'
+        Get-ChildItem $ADDriveName -ErrorAction Stop | Out-Null
         $true
     }
     catch {
