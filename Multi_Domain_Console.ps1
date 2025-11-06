@@ -2,6 +2,9 @@
 param()
 $ModulePath = "$PSScriptRoot\WindowsPowerShell\Modules\AD"
 Get-ChildItem $ModulePath -Include '*.psm1' -Recurse | Import-Module -Force -erroraction Stop
+$ADDriveName =  $Domain = $NewADDrive = ''
+$UsedADDrives = @()
+Set-Location $PSScriptRoot
 Push-Location
 
 $DomainControllerIP = [ordered]@{}
@@ -12,19 +15,24 @@ $Options = [string[]]$DomainControllerIP.keys
 while ($true) {
     #Clear-Host -Force
     $Option = Show-Menu -Title 'Domains' -Choices $Options
-    if ($Option -eq 0) { exit }
+    if ($Option -eq 0) { 
+        break MainMenuExitLabel 
+    }
     $Domain = $Options[$Option - 1]
     # Determine if we can use an existing AD drive and that drive authentication with the domain is still valid
     if (Test-ADDrive -Domain $Domain) {
-        $MYADDriveName = $Domain + ':\'
+        $ADDriveName = "$($Domain):" 
     }
     else {
         $Server = $DomainControllerIP.$Domain
         "`n"; Write-Warning "Connecting to domain controller $Server in $Domain.............."
         $Credential = Get-Credential -Message "Enter credential for domain: $Domain"
         try {
-            $MYADDrive = New-ADDrive -DomainControllers $Server -Credential $Credential -ErrorAction Stop
-            $MYADDriveName = $MYADDrive.Name + ":\"
+            $NewADDrive = New-ADDrive -DomainControllers $Server -Credential $Credential -ErrorAction Stop
+            $ADDriveName = "$($NewADDrive):" 
+            $UsedADDrives = $UsedADDrives + $NewADDrive.Name
+            Write-Verbose "NewADDrive: $($NewADDrive.Name)"
+            Write-Verbose "UsedADDrives: $UsedADDrives"
         }
         catch {
             $ErrorDetails = $_.Exception.Message
@@ -36,8 +44,8 @@ while ($true) {
             continue
         }
     }
-    Write-Verbose $MYADDriveName
-    Set-Location $MYADDriveName
+    Write-Verbose "Switching to $ADDriveName"
+    Set-Location "$($ADDriveName)\"
 
     $Level_2_Menus = [ordered]@{}
     Import-Csv "$PSScriptRoot\Level_2_Menus.csv" | 
@@ -64,7 +72,9 @@ while ($true) {
         )
     }
 }
+# Cleanup
 Pop-Location
-Write-Verbose $MYADDrive
-Remove-PSDrive $MYADDrive
+Write-Verbose "Removing AD drives used: $UsedADDrives"
+# Remove all previously used AD drives
+$UsedADDrives | % {remove-PSDrive $_}
 Return
