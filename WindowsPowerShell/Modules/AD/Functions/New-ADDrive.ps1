@@ -45,7 +45,7 @@ function New-ADDrive {
             }
             if ( Test-NetConnection $DomainController -Port 9389 -InformationLevel Quiet ) {
                 $Server = $DomainController
-                Write-Verbose "Connection Test succeeded."
+                Write-Verbose "Connection test succeeded."
                 break
             }
         }
