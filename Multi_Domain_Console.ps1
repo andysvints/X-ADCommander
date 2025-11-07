@@ -81,7 +81,7 @@ while ($true) {
     }
 }
 # Cleanup
-if ( $SelectedMenu -ne 6 ) {Pop-Location}
+if ( $SelectedMenuID -ne 6 ) {Pop-Location}
 Write-Verbose "Removing AD drives used: $UsedADDrives"
 # Remove all previously used AD drives
 $UsedADDrives | 
