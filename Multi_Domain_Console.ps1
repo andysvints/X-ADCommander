@@ -2,7 +2,7 @@
 param()
 $ModulePath = "$PSScriptRoot\WindowsPowerShell\Modules\AD"
 Get-ChildItem $ModulePath -Include '*.psm1' -Recurse | Import-Module -Force -erroraction Stop
-$ADDriveName =  $Domain = $NewADDrive = ''
+$ADDrive =  $Domain = $NewADDrive = ''
 $UsedADDrives = [System.Collections.Generic.List[string]]::new()
 # Detect existing AD drives from a previous session to track them for clean-up (removal)
 $AllDomains = Import-Csv "$PSScriptRoot\Domain_Controllers_IPs.csv" | 
@@ -28,16 +28,16 @@ while ($true) {
     }
     $Domain = $Options[$Option - 1]
     # Determine if we can use an existing AD drive and that drive authentication with the domain is still valid
-    if (Test-ADDrive -Domain $Domain) {
-        $ADDriveName = "$($Domain):" 
+    if (Test-ADDrive -Name $Domain) {
+        $ADDrive = "$($Domain):" 
     }
     else {
         $Server = $DomainControllerIP.$Domain
-        "`n"; Write-Warning "Connecting to domain controller $Server in $Domain.............."
+        Write-Host "Connecting to domain controller $Server in $Domain.............." -ForegroundColor Yellow
         $Credential = Get-Credential -Message "Enter credential for domain: $Domain"
         try {
             $NewADDrive = New-ADDrive -DomainControllers $Server -Credential $Credential -ErrorAction Stop
-            $ADDriveName = "$($NewADDrive):" 
+            $ADDrive = "$($NewADDrive):" 
             $UsedADDrives.Add(($NewADDrive.Name).ToLower())
             Write-Verbose "NewADDrive: $($NewADDrive.Name)"
             Write-Verbose "UsedADDrives: $UsedADDrives"
@@ -52,8 +52,8 @@ while ($true) {
             continue
         }
     }
-    Write-Verbose "Switching to $ADDriveName"
-    Set-Location "$($ADDriveName)\"
+    Write-Verbose "Switching to $ADDrive"
+    Set-Location "$($ADDrive)\"
 
     $Level_2_Menus = [ordered]@{}
     Import-Csv "$PSScriptRoot\Level_2_Menus.csv" | 

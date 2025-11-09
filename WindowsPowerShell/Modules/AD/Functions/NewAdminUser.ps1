@@ -1,37 +1,45 @@
 
 function NewAdminUser {
     param ([Parameter(Mandatory = $true)][string]$Domain)
-    # ensure authentication with the domain is still valid
-    if (-not (Test-ADDrive -Domain $Domain)) {
+    if (-not (Test-ADDrive -Name $Domain)) {
         Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
         exit
     }
+    $DomainDNRoot = (Get-ADDomain).DistinguishedName
+    $DomainDNSSuffix = (Get-ADDomain).DNSRoot
+
     $Username = read-host -Prompt "Username"
     $Password = read-host -Prompt "Password" -AsSecureString
     $Description = read-host -Prompt "Description"
     $Mobile = read-host -Prompt "Mobile"
-    $DomainDNRoot = $MYADDrive.RootWithoutAbsolutePathToken
-    $DomainDNSSuffix = (Get-ADDomain).DNSRoot
-    $Path = 'OU=Admin Accounts,' + $DomainDNRoot
+
+    $Path = Read-Host -Prompt "Enter the OU name for admin users (default: Admin Accounts)"
+    if ([string]::IsNullOrWhiteSpace($Path)) {
+        $Path = "Admin Accounts"
+    }
+    $Path = $Path.Trim()
+    $Path = "OU=" + $Path + "," + $DomainDNRoot
+
+    Write-Host "`nCreating new admin user $Username in $Domain under $Path..............`n" -ForegroundColor Yellow
+    $UserParams = @{
+        Name              = $UserName
+        GivenName         = $UserName
+        Surname           = ""
+        UserPrincipalName = "$UserName@$DomainDNSSuffix"
+        SamAccountName    = $UserName
+        Description       = $Description
+        DisplayName       = $UserName
+        Path              = $Path
+        AccountPassword   = $Password
+        Enabled           = $true
+        Mobile            = $Mobile
+    }
     try {
-        New-ADUser -Name $UserName `
-            -GivenName $UserName `
-            -Surname "" `
-            -UserPrincipalName "$UserName@$DomainDNSSuffix" `
-            -SamAccountName $UserName `
-            -Description $Description `
-            -DisplayName $UserName `
-            -Path $Path `
-            -AccountPassword $Password  `
-            -OutVariable NewAccount `
-            -PassThru `
-            -Enabled $True `
-            -Mobile  $Mobile `
-            -Verbose
-        Write-Host "Account creation succeeded for $Username in $Domain." -ForegroundColor Green
+        New-ADUser @UserParams -ErrorAction Stop
+        Write-Host "Account creation succeeded for $Username in $Domain Domain." -ForegroundColor Green
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Host "Account creation failed for $Username in $Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+        Write-Host "Account creation failed for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }

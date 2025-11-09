@@ -1,35 +1,44 @@
 function New-ADDrive {
     <#
     .SYNOPSIS
-       Function to create a new Active Directory drive.
+       Create a new Active Directory PSDrive for a domain.
     .DESCRIPTION
-       Function to create a new Active Directory drive and return as outcome a drive pointing to specified domain.
-    .PARAMETER DCs
-        array of IPs or FQDNs of domain controllers.
+       Creates a new Active Directory PSDrive named after the domain (Get-ADDomain.Name)
+       and pointing to the domain root (Get-ADDomain.DistinguishedName). Tries each
+       supplied domain controller until a reachable one is found (TCP port 9389),
+       unless the -NoConnectionTest switch is used to skip connectivity checks.
+    .PARAMETER DomainControllers
+        Array of IP addresses or FQDNs of domain controllers to try.
     .PARAMETER Credential
-        User name and password as PS Credential variable.
+        PSCredential used to authenticate to the domain controller(s).
     .PARAMETER NoConnectionTest
-        If you want to test the connection with the Domain Controller(s) before creating the Active Directory drive.
+        If specified, skip TCP connectivity testing and use the first value from
+        DomainControllers directly.
     .EXAMPLE
-        $DomainControllers = @('DC01.contoso.com','DC02.contoso.com')
-        New-ADDrive -DCs $DomainControllers -Credential (Get-Credential) -TestConnection
+        $DCs = @('dc01.contoso.com','dc02.contoso.com')
+        New-ADDrive -DomainControllers $DCs -Credential (Get-Credential)
+    .EXAMPLE
+        # Skip connectivity tests and force using first DC
+        New-ADDrive -DomainControllers 'dc01.contoso.com' -Credential (Get-Credential) -NoConnectionTest
+    .OUTPUTS
+        System.Management.Automation.PSDriveInfo
     .NOTES
         Version 1.0.0
     #>
-    [CmdletBinding(
-        SupportsPaging = $True,
-        SupportsShouldProcess = $True)]
-    [OutputType('ADDriveInfo')]
+    [CmdletBinding()]
+    [OutputType('System.Management.Automation.PSDriveInfo')]
     param (
         [Parameter(Mandatory = $true,
             Position = 0,
             ValueFromPipeline = $true
         )]
         [string[]]$DomainControllers,
+
         [Parameter(Mandatory = $true,
             Position = 1
         )]
         [System.Management.Automation.PSCredential]$Credential,
+
         [Parameter(Mandatory = $false,
             Position = 2
         )]
@@ -48,13 +57,19 @@ function New-ADDrive {
             }
         }
         if (-Not $Server) {
-            Write-error -Message "Unable to create an Active Directory drive because no online Domain Controller was reachable." -ErrorAction Stop
-            Return
+            $ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
+                [System.Management.Automation.DriveNotFoundException]::new("Unable to create an Active Directory drive because none of the supplied domain controllers was reachable."),
+                'ADDriveCreationFailed',
+                [System.Management.Automation.ErrorCategory]::ResourceUnavailable,
+                $DomainControllers
+            )
+            $PSCmdlet.ThrowTerminatingError($ErrorRecord)
+            return
         }
         try {
             $DomainRoot = (Get-ADDomain -Server $Server -Credential $Credential).DistinguishedName
             $ADDriveName = (Get-ADDomain -Server $Server -Credential $Credential).Name
-            $ADDrive = New-PSDrive -Name $ADDriveName -PSProvider ActiveDirectory -Root $DomainRoot -Credential $Credential -Server $Server -Scope Global -EA Stop
+            $ADDrive = New-PSDrive -Name $ADDriveName -PSProvider ActiveDirectory -Root $DomainRoot -Credential $Credential -Server $Server -Scope Global -ErrorAction Stop
         }
         catch {
             $ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
