@@ -1,7 +1,7 @@
 [cmdletbinding()]
 param()
 $ModulePath = "$PSScriptRoot\WindowsPowerShell\Modules"
-Get-ChildItem $ModulePath -Include '*.psm1' -Recurse | Import-Module -Force -erroraction Stop
+Get-ChildItem $ModulePath | select -ExpandProperty FullName | Import-Module -Force -erroraction Stop
 $ADDrive =  $Domain = $NewADDrive = ''
 $UsedADDrives = [System.Collections.Generic.List[string]]::new()
 # Detect existing AD drives from a previous session to track them for clean-up (removal)
