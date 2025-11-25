@@ -11,10 +11,10 @@
     Name of the AD PSDrive to test (for example, 'contoso').
 
 .EXAMPLE
-    Test-ADDrive -Name 'contoso'
+    Test-XadcDrive -Name 'contoso'
 
 .EXAMPLE
-    'contoso' | Test-ADDrive
+    'contoso' | Test-XadcDrive
 
 .OUTPUTS
     System.Boolean
@@ -22,7 +22,7 @@
 .NOTES
     Version 1.1.0
 #>
-function Test-ADDrive {
+function Test-XadcDrive {
     [CmdletBinding()]
     [OutputType([bool])]
     param(
