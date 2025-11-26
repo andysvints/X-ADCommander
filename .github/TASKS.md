@@ -1,5 +1,5 @@
 
-After "Exit to AD drive prompt" and going back then exitting from XADCommander completely, current ADDrive is not removed
+
 
 After "Exit to AD drive prompt" and going back then running Get-ADPrincipalGroupMembership, error : Get-ADPrincipalGroupMembership: The operation being requested was not performed because the user has not been authenticated. 
 
@@ -13,6 +13,8 @@ when back from sub menu to main, text remanents from sub keep showing and interv
 
 
 Fixed:
+
+After "Exit to AD drive prompt" and going back then exitting from XADCommander completely, current ADDrive is not removed
 
 when exiting to AD drive prompt the kept drive does not get removed on next run
 
