@@ -2,7 +2,6 @@ function Start-XADCommander {
 [cmdletbinding()]
 param()
 $ADDrive =  $Domain = $NewADDrive = ''
-Push-Location
 
 $ParentFolder = Split-Path $PSScriptRoot
 $DataFolder =Join-Path $ParentFolder 'Data'
@@ -17,6 +16,13 @@ Get-PSDrive |
     Select-Object -ExpandProperty Name |
     ForEach-Object {$UsedADDrives.Add($_.ToLower())}
 
+if ($UsedADDrives) {
+    Set-location $ENV:USERPROFILE
+    Push-Location
+} 
+else {
+    Push-Location
+}
 $DomainControllerIP = [ordered]@{}
 $Domain_Controllers_IPs_CSV | ForEach-Object { $DomainControllerIP[$_.Domain] = $_.IP }
 $Options = [string[]]$DomainControllerIP.keys
@@ -87,7 +93,7 @@ Write-Verbose "Removing AD drives used: $UsedADDrives"
 # Remove all previously used AD drives
 $UsedADDrives | 
     ForEach-Object {
-            Remove-PSDrive $_ -ErrorAction SilentlyContinue
+            Remove-PSDrive $_ -ErrorAction Continue 
     }
 Return
 }
