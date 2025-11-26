@@ -1,5 +1,7 @@
 
-After . Exit to AD drive prompt an foing back then exitting from XADCommander completly, current ADDrive is not removed
+After "Exit to AD drive prompt" and going back then exitting from XADCommander completely, current ADDrive is not removed
+
+After "Exit to AD drive prompt" and going back then running Get-ADPrincipalGroupMembership, error : Get-ADPrincipalGroupMembership: The operation being requested was not performed because the user has not been authenticated. 
 
 'g','h' | Show-XADMenu not working properly
 
