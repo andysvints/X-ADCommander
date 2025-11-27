@@ -16,7 +16,9 @@ Get-PSDrive |
     Select-Object -ExpandProperty Name |
     ForEach-Object {$UsedADDrives.Add($_.ToLower())}
 
-if ($UsedADDrives) {
+$CurrentLocation = (Get-Location).Path
+$CurrentDriveName = $CurrentLocation.Replace(':\','')
+if ($UsedADDrives -and $UsedADDrives -contains $CurrentDriveName) {
     Set-location $ENV:USERPROFILE
     Push-Location
 } 
