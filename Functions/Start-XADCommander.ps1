@@ -1,7 +1,7 @@
 function Start-XADCommander {
 [cmdletbinding()]
 param()
-$ADDrive =  $Domain = $NewADDrive = ''
+$ADDrive =  $Domain = $NewADDrive = $CurrentLocation = $CurrentDriveName = ''
 
 $ParentFolder = Split-Path $PSScriptRoot
 $DataFolder =Join-Path $ParentFolder 'Data'
@@ -20,11 +20,8 @@ $CurrentLocation = (Get-Location).Path
 $CurrentDriveName = $CurrentLocation.Replace(':\','')
 if ($UsedADDrives -and $UsedADDrives -contains $CurrentDriveName) {
     Set-location $ENV:USERPROFILE
-    Push-Location
 } 
-else {
-    Push-Location
-}
+Push-Location
 $DomainControllerIP = [ordered]@{}
 $Domain_Controllers_IPs_CSV | ForEach-Object { $DomainControllerIP[$_.Domain] = $_.IP }
 $Options = [string[]]$DomainControllerIP.keys
