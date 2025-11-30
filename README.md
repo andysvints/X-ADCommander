@@ -11,7 +11,7 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 
 ## Installation
 
-1. Download the latest release from:
+1. Download the latest release (X-ADCommander.zip file) from:
    https://github.com/msamersawas/X-ADCommander/releases
 
 2. Unzip the downloaded archive.
