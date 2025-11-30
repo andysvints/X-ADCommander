@@ -5,8 +5,9 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 ## Requirements
 
 - PowerShell 5.1 or PowerShell 7+ (PowerShell Core)
-- If you plan to manage Active Directory from the host, the ActiveDirectory module (part of RSAT) must be available on that system.
-- Appropriate network connectivity and credentials for the forests/domains you will manage.
+- The ActiveDirectory module (part of RSAT) must be available on the system.
+- Active Directory Web Services (ADWS) must be running on domain controllers configured in the module (see step 4 below), and its default port TCP 9389 must be reachable from the system running the module.
+- You must have appropriate credentials for the forests/domains you will manage.
 
 ## Installation
 
@@ -23,13 +24,15 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
    After copying, the module path should look like:
    `C:\...\Modules\X-ADCommander\X-ADCommander.psm1` (or similar).
 
-4. If the files were downloaded as a ZIP from the internet, you may need to unblock them:
+4. Modify the file `Domain_Controllers_IPs.csv` with the domain names and IPs of domain controllers for each domain you need to manage.
+
+5. If the files were downloaded as a ZIP from the internet, you may need to unblock them:
    - In PowerShell: `Get-ChildItem -Path .\X-ADCommander\* -Recurse | Unblock-File`
 
-5. Import the module:
+6. Import the module:
    - `Import-Module X-ADCommander`
 
-6. Start the interactive console:
+7. Start the interactive console:
    - `Start-XADCommander`
 
 ## Usage
@@ -41,14 +44,16 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 ## Notes
 
 - You may need administrative privileges or appropriate delegated permissions in the target Active Directory environments.
-- Ensure your execution policy allows running local modules. For example, to set RemoteSigned for the current user:
-  - `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned -Force`
+- Ensure your execution policy allows running local modules. For example, to set `RemoteSigned` for the current user:
+  - `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force`
 
 
-## Adding Extensions 
-Use the following template to add new custom functions:
+## Adding Extensions
 
-function ActionName-XADUser {
+- Use the following template to add new custom functions:
+
+```powershell
+function Verb-XADNoun {
     param ([Parameter(Mandatory = $true)][string]$Domain)
     if (-not (Test-XADDrive -Name $Domain)) {
         Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
@@ -66,6 +71,9 @@ function ActionName-XADUser {
         Write-Host "Failed to (action). ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }
+```
+
+- Update the file `Level_2_Menus.csv` with the new custom functions.
 
 ## Issues and Contributions
 
