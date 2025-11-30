@@ -1,9 +1,7 @@
 
 
 
-After "Exit to AD drive prompt" and going back then running Get-ADPrincipalGroupMembership, error : Get-ADPrincipalGroupMembership: The operation being requested was not performed because the user has not been authenticated. 
 
-'g','h' | Show-XADMenu not working properly
 
 
 
@@ -26,3 +24,5 @@ in NewAdminUser fix hardcoded OU
 in NewServiceAccountInNewOU fix hardcoded OU & $OUName & $MYADDrive
 
 Test NewAdminUser and NewServiceAccountInNewOU
+
+After "Exit to AD drive prompt" and going back then running Get-ADPrincipalGroupMembership, error : Get-ADPrincipalGroupMembership: The operation being requested was not performed because the user has not been authenticated. 
