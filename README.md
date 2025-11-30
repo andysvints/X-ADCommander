@@ -29,10 +29,13 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 5. If the files were downloaded as a ZIP from the internet, you may need to unblock them:
    - In PowerShell: `Get-ChildItem -Path .\X-ADCommander\* -Recurse | Unblock-File`
 
-6. Import the module:
+6. Ensure your execution policy allows running the module. For example, to set `Bypass` for the current user:
+  - `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force`
+
+7. Import the module:
    - `Import-Module X-ADCommander`
 
-7. Start the interactive console:
+8. Start the interactive console:
    - `Start-XADCommander`
 
 ## Usage
@@ -43,8 +46,7 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 
 ## Notes
 
-- Ensure your execution policy allows running the module. For example, to set `Bypass` for the current user:
-  - `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force`
+
 
 
 ## Adding Extensions
