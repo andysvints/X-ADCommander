@@ -41,13 +41,8 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 ## Usage
 
 - Run `Start-XADCommander` to launch the menu-driven console.
-- Use the menus to select forests, domains, and the management tasks you need.
-- For scripting or automation, import the module and call individual functions exported by the module.
-
-## Notes
-
-
-
+- Use the menus to select domains, and the management tasks you need.
+- The module exports functions New-XADDrive and Test-XADDrive that you can directly use in your own scripts.
 
 ## Adding Extensions
 
