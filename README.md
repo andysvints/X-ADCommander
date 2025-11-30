@@ -6,7 +6,7 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 
 - PowerShell 5.1 or PowerShell 7+ (PowerShell Core)
 - The ActiveDirectory module (part of RSAT) must be available on the system.
-- Active Directory Web Services (ADWS) must be running on domain controllers configured in the module (see step 4 below), and its default port TCP 9389 must be reachable from the system running the module.
+- Active Directory Web Services (ADWS) must be running on domain controller(s) configured in the module (see step 4 below), ADWS port (TCP 9389 by default) must be reachable from the system running the module.
 - You must have appropriate credentials for the forests/domains you will manage.
 
 ## Installation
