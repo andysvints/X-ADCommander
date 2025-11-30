@@ -30,7 +30,7 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
    - In PowerShell: `Get-ChildItem -Path .\X-ADCommander\* -Recurse | Unblock-File`
 
 6. Ensure your execution policy allows running the module. For example, to set `Bypass` for the current user:
-  - `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force`
+   - `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force`
 
 7. Import the module:
    - `Import-Module X-ADCommander`
@@ -46,7 +46,7 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 
 ## Adding Extensions
 
-- Use the following template to add new custom function:
+- Use the following function template to add new custom function:
 
 ```powershell
 function Verb-XADNoun {
