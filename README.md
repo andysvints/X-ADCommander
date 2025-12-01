@@ -11,25 +11,23 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 
 ## Installation
 
-# Method 1: using Powershell Gallery
-
-1- Install the module
+1. Install the module
  - Install-Module -Name X-ADCommander
 
-2- Depending on the module installation folder (see example paths below), modify the file 
+2. Depending on the module installation folder (see example paths below), modify the file 
 `...\Modules\X-ADCommander\Data\Domain_Controllers_IPs.csv` to reflect the domain names and IPs of domain controllers for each target domain.
 PowerShell module folders. Examples:
    - PowerShell Core and Windows PowerShell (All users): `%Programfiles%\WindowsPowerShell\Modules\`
    - Windows PowerShell (Current user): `%UserProfile%\Documents\WindowsPowerShell\Modules\`
    - PowerShell Core (Current user): `%UserProfile%\Documents\PowerShell\Modules\`
 
-3- Ensure your PowerShell execution policy allows running the module. For example, to set `Bypass` for the current user:
+3. Ensure your PowerShell execution policy allows running the module. For example, to set `Bypass` for the current user:
    - `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force`
 
-4- Import the module
+4. Import the module
  - Import-Module X-ADCommander
  
-5- Start the interactive console:
+5. Start the interactive console:
    - `Start-XADCommander`
 
 
