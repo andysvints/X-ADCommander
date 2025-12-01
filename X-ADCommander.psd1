@@ -12,13 +12,13 @@
 RootModule = 'X-ADCommander.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.1'
+ModuleVersion = '1.0.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
 
 # ID used to uniquely identify this module
-GUID = '824a9e6b-4c8a-4761-a143-dbd0cb50a536'
+GUID = '8ef36807-fb1d-4611-9d1e-99418470e35b'
 
 # Author of this module
 Author = 'Mhd Samer Sawas'
@@ -33,7 +33,7 @@ Copyright = '(c) 2025 Mhd Samer Sawas. All rights reserved.'
 Description = 'Cross-forest AD administration made simple, scriptable, and extensible.'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '5.0'
+PowerShellVersion = '5.1'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -51,7 +51,7 @@ PowerShellVersion = '5.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('ActiveDirectory')
+# RequiredModules = @('')
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -69,16 +69,16 @@ RequiredModules = @('ActiveDirectory')
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'New-XADDrive', 'Test-XADDrive', 'Start-XADCommander'
+FunctionsToExport = 'New-Drive', 'Test-Drive', 'Start-Commander'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+CmdletsToExport = ''
 
 # Variables to export from this module
-VariablesToExport = '*'
+VariablesToExport = ''
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+AliasesToExport = ''
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -116,7 +116,7 @@ PrivateData = @{
         # RequireLicenseAcceptance = $false
 
         # External dependent modules of this module
-        # ExternalModuleDependencies = @()
+        ExternalModuleDependencies = @('ActiveDirectory')
 
     } # End of PSData hashtable
 
@@ -126,7 +126,7 @@ PrivateData = @{
 # HelpInfoURI = ''
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-DefaultCommandPrefix = 'XAD'
+# DefaultCommandPrefix = ''
 
 }
 

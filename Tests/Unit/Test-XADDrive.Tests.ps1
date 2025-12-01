@@ -7,7 +7,7 @@ Describe "Test-XADDrive" {
         BeforeAll {
 
             $username = "contoso\administrator"
-            $password = "Somepass1" | ConvertTo-SecureString -AsPlainText -Force
+            $password = Read-Host "Enter password" -AsSecureString
             $cred = New-Object System.Management.Automation.PSCredential ($username, $password)
             New-XADDrive -DomainControllers 'dc.contoso.com' -Credential $cred -NoConnectionTest
             $result = Test-XADDrive -Name 'contoso'
