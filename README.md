@@ -4,9 +4,9 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 
 ## Requirements
 
-- PowerShell 5.1 or PowerShell 7+ (PowerShell Core)
+- PowerShell 5.0 or PowerShell 7+ (PowerShell Core)
 - The ActiveDirectory module (part of RSAT) must be available on the system.
-- Active Directory Web Services (ADWS) must be running on domain controller(s) configured in the module (see step 4 below), ADWS port (TCP 9389 by default) must be reachable from the system running the module.
+- Active Directory Web Services (ADWS) must be running on domain controller(s) configured in the module (see step 4 below) and ADWS port (TCP 9389 by default) must be reachable from the system running the module.
 - Credentials of an account with administrative privileges or appropriate delegated permissions in the target forests/domains.
 
 ## Installation
@@ -17,7 +17,7 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 2. Unzip the downloaded archive.
 
 3. Copy the `X-ADCommander` folder to one of your PowerShell module folders. Examples:
-   - Windows PowerShell (All users): `%Programfiles%\WindowsPowerShell\Modules\`
+   - PowerShell Core and Windows PowerShell (All users): `%Programfiles%\WindowsPowerShell\Modules\`
    - Windows PowerShell (Current user): `%UserProfile%\Documents\WindowsPowerShell\Modules\`
    - PowerShell Core (Current user): `%UserProfile%\Documents\PowerShell\Modules\`
 
@@ -26,10 +26,10 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 
 4. Modify the file `...\Modules\X-ADCommander\Data\Domain_Controllers_IPs.csv` to reflect the domain names and IPs of domain controllers for each target domain.
 
-5. If the files were downloaded as a ZIP from the internet, you may need to unblock them:
+5. Since the files were downloaded as a ZIP archive from the internet, you may need to unblock them:
    - In PowerShell: `Get-ChildItem -Path .\X-ADCommander\* -Recurse | Unblock-File`
 
-6. Ensure your execution policy allows running the module. For example, to set `Bypass` for the current user:
+6. Ensure your PowerShell execution policy allows running the module. For example, to set `Bypass` for the current user:
    - `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force`
 
 7. Import the module:
