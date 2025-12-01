@@ -26,7 +26,7 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
    - `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force`
 
 4. Import the module
-   - Import-Module X-ADCommander
+   - `Import-Module X-ADCommander`
  
 5. Start the interactive console:
    - `Start-XADCommander`
