@@ -15,7 +15,7 @@ RootModule = 'X-ADCommander.psm1'
 ModuleVersion = '1.0.4'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions = @('Desktop', 'Core')
 
 # ID used to uniquely identify this module
 GUID = '6d189e05-d346-472f-9cb4-679b4ca0a877'
@@ -36,7 +36,7 @@ Description = 'Cross-forest AD administration made simple, scriptable, and exten
 PowerShellVersion = '5.1'
 
 # Name of the PowerShell host required by this module
-# PowerShellHostName = ''
+PowerShellHostName = ''
 
 # Minimum version of the PowerShell host required by this module
 # PowerShellHostVersion = ''
@@ -51,7 +51,7 @@ PowerShellVersion = '5.1'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('ActiveDirectory')
+# RequiredModules = @('')
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -95,13 +95,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'active-directory','domain','multi-domain','multi-forest','console','management'
+        Tags = 'activedirectory','domain','multi-domain','multi-forest','cross-forest','management','console','interactive', 'text-menu','cross-forest','administration','xadcommander','x-adcommander','PowerShell', 'extensible','Powershell 5.1+','PowerShell Core','PowerShell 7+'
 
         # A URL to the license for this module.
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/msamersawas/X-ADCommander'
 
         # A URL to an icon representing this module.
         # IconUri = ''
