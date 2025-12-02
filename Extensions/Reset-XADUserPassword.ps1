@@ -2,20 +2,20 @@
 function Reset-XADUserPassword {
     param ([Parameter(Mandatory = $true)][string]$Domain)
     if (-not (Test-XADDrive -Name $Domain)) {
-        Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
+         "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
         exit
     }
     $Username = read-host -Prompt "Username"
-    Write-Host "`nFetching account details for $Username in $Domain Domain..............`n" -ForegroundColor Yellow
+     "`nFetching account details for $Username in $Domain Domain..............`n" -ForegroundColor Yellow
 
     try {
         $Useraccount = Get-ADUser $Username -Properties mobile, PasswordLastSet, PasswordNeverExpires, PasswordExpired, msDS-UserPasswordExpiryTimeComputed -ErrorAction Stop
-        Write-Host "Account details for $Username in $Domain Domain:" -ForegroundColor Green
+         "Account details for $Username in $Domain Domain:" -ForegroundColor Green
         $Useraccount | Select-Object mobile, PasswordLastSet, PasswordNeverExpires, PasswordExpired, @{Name = "PasswordExpiryDate"; Expression = { [datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed") } }
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Host "Failed to fetch details for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+         "Failed to fetch details for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
         return
     }
     $Password = read-host -Prompt "Password" -AsSecureString
@@ -23,13 +23,13 @@ function Reset-XADUserPassword {
     if ($Confirm -notin 'y', 'Y') {
         continue
     }
-    Write-Host "`nSetting password for $Username in $Domain Domain..............`n" -ForegroundColor Yellow
+     "`nSetting password for $Username in $Domain Domain..............`n" -ForegroundColor Yellow
     try {
         $Useraccount | Set-ADAccountPassword -NewPassword $Password -Reset -ErrorAction Stop
-        Write-Host "Password reset succeeded for $Username in $Domain Domain." -ForegroundColor Green
+         "Password reset succeeded for $Username in $Domain Domain." -ForegroundColor Green
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Host "Password reset failed for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+         "Password reset failed for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }
