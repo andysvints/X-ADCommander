@@ -11,7 +11,7 @@ function Reset-XADUserPassword {
     try {
         $Useraccount = Get-ADUser $Username -Properties mobile, PasswordLastSet, PasswordNeverExpires, PasswordExpired, msDS-UserPasswordExpiryTimeComputed -ErrorAction Stop
         Write-Host "Account details for $Username in $Domain Domain:" -ForegroundColor Green
-        $Useraccount | Select mobile, PasswordLastSet, PasswordNeverExpires, PasswordExpired, @{Name = "PasswordExpiryDate"; Expression = { [datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed") } }
+        $Useraccount | Select-Object mobile, PasswordLastSet, PasswordNeverExpires, PasswordExpired, @{Name = "PasswordExpiryDate"; Expression = { [datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed") } }
     }
     catch {
         $ErrorDetails = $_.Exception.Message

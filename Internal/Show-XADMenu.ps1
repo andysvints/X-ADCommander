@@ -16,9 +16,6 @@
 .EXAMPLE
     $Choice = Show-XADMenu -Title 'Actions' -Choices @('Create','Delete','Exit')
 
-.EXAMPLE
-    @('Option1', 'Option2') | Show-XADMenu -Title 'Select Option'
-
 .OUTPUTS
     System.Int32
 
@@ -36,8 +33,7 @@ function Show-XADMenu {
 
         [Parameter(
             Mandatory = $true,
-            Position = 1,
-            ValueFromPipeline = $true
+            Position = 1
         )]
         [string[]]$Choices
     )

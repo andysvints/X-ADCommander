@@ -10,9 +10,9 @@ Describe "Test-XADDrive" {
             $password = Read-Host "Enter password" -AsSecureString
             $cred = New-Object System.Management.Automation.PSCredential ($username, $password)
             New-XADDrive -DomainControllers 'dc.contoso.com' -Credential $cred -NoConnectionTest
-            $result = Test-XADDrive -Name 'contoso'
         }
         It "Returns true when drive exists and is accessible" {
+            $result = Test-XADDrive -Name 'contoso'
             $result | Should -Be $true
         }
     }
