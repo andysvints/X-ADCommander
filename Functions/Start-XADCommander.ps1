@@ -40,7 +40,7 @@ while ($true) {
     }
     else {
         $Server = $DomainControllerIP.$Domain
-         "Connecting to domain controller $Server in $Domain.............." -ForegroundColor Yellow
+        Write-Host "Connecting to domain controller $Server in $Domain.............." -ForegroundColor Yellow
         $Credential = Get-Credential -Message "Enter credential for domain: $Domain"
         try {
             $NewADDrive = New-XADDrive -DomainControllers $Server -Credential $Credential -NoConnectionTest -ErrorAction Stop

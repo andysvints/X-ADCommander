@@ -2,7 +2,7 @@
 function New-XADAdmin {
     param ([Parameter(Mandatory = $true)][string]$Domain)
     if (-not (Test-XADDrive -Name $Domain)) {
-         "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
+        Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
         exit
     }
     $DomainDNRoot = (Get-ADDomain).DistinguishedName
@@ -20,7 +20,7 @@ function New-XADAdmin {
     $Path = $Path.Trim()
     $Path = "OU=" + $Path + "," + $DomainDNRoot
 
-     "`nCreating new admin user $Username in $Domain under $Path..............`n" -ForegroundColor Yellow
+    Write-Host "`nCreating new admin user $Username in $Domain under $Path..............`n" -ForegroundColor Yellow
     $UserParams = @{
         Name              = $UserName
         GivenName         = $UserName
@@ -36,10 +36,10 @@ function New-XADAdmin {
     }
     try {
         New-ADUser @UserParams -ErrorAction Stop
-         "Account creation succeeded for $Username in $Domain Domain." -ForegroundColor Green
+        Write-Host "Account creation succeeded for $Username in $Domain Domain." -ForegroundColor Green
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-         "Account creation failed for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+        Write-Host "Account creation failed for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }

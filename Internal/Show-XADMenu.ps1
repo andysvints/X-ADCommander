@@ -38,15 +38,15 @@ function Show-XADMenu {
         [string[]]$Choices
     )
     $SelectedChoice = 0
-     "$Title" -ForegroundColor Cyan
-     "-------------------------------"
+    Write-Host "$Title" -ForegroundColor Cyan
+    Write-Host "-------------------------------"
     $i = 1
     foreach ($Choice in $Choices) {
         $RandomColor = Get-Random -Minimum 1 -Maximum 15
-         "$i. $Choice" -ForegroundColor $RandomColor
+        Write-Host "$i. $Choice" -ForegroundColor $RandomColor
         $i++
     }
-     "-------------------------------"
+    Write-Host "-------------------------------"
     try {
         [int]$SelectedChoice = Read-Host "`nEnter your choice (1-$($Choices.Count)) or type anything else to quit"
     }

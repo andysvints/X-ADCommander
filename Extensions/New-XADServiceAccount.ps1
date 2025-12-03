@@ -1,7 +1,7 @@
 function New-XADServiceAccount {
     param ([Parameter(Mandatory = $true)][string]$Domain)
     if (-not (Test-XADDrive -Name $Domain)) {
-         "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
+        Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
         exit
     }
     $DomainDNRoot = (Get-ADDomain).DistinguishedName
@@ -17,14 +17,14 @@ function New-XADServiceAccount {
         $OUName = Read-Host -Prompt "Enter the name of the new sub OU"
     } while ([string]::IsNullOrWhiteSpace($OUName))
     $OUName = $OUName.Trim()
-     "`nCreating $OUName OU under $OUPath in $Domain Domain..............`n" -ForegroundColor Yellow
+    Write-Host "`nCreating $OUName OU under $OUPath in $Domain Domain..............`n" -ForegroundColor Yellow
     try {
         New-ADOrganizationalUnit -Name $OUName -Path $OUPath -ErrorAction Stop
-         "OU creation succeeded for OU $OUName in $Domain Domain." -ForegroundColor Green
+        Write-Host "OU creation succeeded for OU $OUName in $Domain Domain." -ForegroundColor Green
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-         "OU creation failed for $OUName in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+        Write-Host "OU creation failed for $OUName in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
     do {
         $Username = read-host -Prompt "Service Account Username"
@@ -46,13 +46,13 @@ function New-XADServiceAccount {
         Enabled              = $true
         PasswordNeverExpires = $true
     }
-     "`nCreating service account $Username in $Domain Domain under $Path..............`n" -ForegroundColor Yellow
+    Write-Host "`nCreating service account $Username in $Domain Domain under $Path..............`n" -ForegroundColor Yellow
     try {
         New-ADUser @NewUserParams -ErrorAction Stop
-         "Account creation succeeded for $Username in $Domain Domain." -ForegroundColor Green
+        Write-Host "Account creation succeeded for $Username in $Domain Domain." -ForegroundColor Green
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-         "Service Account creation failed for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+        Write-Host "Service Account creation failed for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }
