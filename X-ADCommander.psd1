@@ -12,13 +12,13 @@
 RootModule = 'X-ADCommander.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.5'
+ModuleVersion = '1.0.6'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop', 'Core'
 
 # ID used to uniquely identify this module
-GUID = '79a3af00-b191-4abd-916d-c1c4508f0747'
+GUID = '10319cd3-5256-4678-8d98-89b38050bd00'
 
 # Author of this module
 Author = 'Mhd Samer Sawas'
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = '- Fixed ScriptAnalyzer warnings.'
+        ReleaseNotes = '- Returned Write-Host for console menus and coloring.'
 
         # Prerelease string of this module
         # Prerelease = ''
