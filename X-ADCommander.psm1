@@ -11,3 +11,6 @@ foreach ($Folder in $FunctionsFolders) {
         . ($JoinedPath + $Function)
     }
 }
+if ($Host.Name -match "ConsoleHost|Visual Studio Code Host") {
+    Show-WelcomeBanner
+}
