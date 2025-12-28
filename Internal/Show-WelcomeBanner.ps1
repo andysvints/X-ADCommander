@@ -6,8 +6,9 @@ function Show-WelcomeBanner {
 *********************************************************************************
 *                                                                               *   
 * IMPORTANT:                                                                    *
-* Before using the module, edit Domain_Controllers_IPs.csv under your local     *
-* AppData folder: C:\Users\username\AppData\Local\X-ADCommander to reflect      *
+* Before using the module, edit Domain_Controllers_IPs.csv in folder            *
+* "X-ADCommander" under your local AppData folder:                              *
+* C:\Users\username\AppData\Local\X-ADCommander to reflect                      *
 * domain names and IPs of domain controllers for each target domain.            *
 *                                                                               *
 * The ActiveDirectory module (part of RSAT) must be installed on the system.    *
