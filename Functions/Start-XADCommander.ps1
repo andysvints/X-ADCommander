@@ -5,7 +5,7 @@ $ADDrive =  $Domain = $NewADDrive = $CurrentLocation = $CurrentDriveName = ''
 
 $ParentFolder = Split-Path $PSScriptRoot
 $DataFolder =Join-Path $ParentFolder 'Data'
-$Domain_Controllers_IPs_CSV = Import-Csv "$DataFolder\Domain_Controllers_IPs.csv"
+$Domain_Controllers_IPs_CSV = Import-Csv $Script:DCIPsCSVPath
 $Level_2_Menus_CSV = Import-Csv "$DataFolder\Level_2_Menus.csv"
 
 $UsedADDrives = [System.Collections.Generic.List[string]]::new()
