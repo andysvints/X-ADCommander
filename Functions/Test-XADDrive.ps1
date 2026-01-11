@@ -36,13 +36,13 @@ function Test-XADDrive {
     
     PROCESS {
         try {
-            Write-Verbose "Checking if AD drive: $Name exists"
+            Write-Verbose "Checking if AD drive $Name exists"
             Get-PSDrive -Name $Name -PSProvider ActiveDirectory -ErrorAction Stop | Out-Null
             
             $ADDrivePath = "$($Name):\"
-            Write-Verbose "Checking if AD drive: $Name is accessible"
+            Write-Verbose "Checking if AD drive $Name is accessible"
             Get-ChildItem $ADDrivePath -ErrorAction Stop | Out-Null
-            Write-Verbose "AD drive $Name is valid and accessible"
+            Write-Verbose "AD drive $Name exists and is accessible"
             $true
         }
         catch {

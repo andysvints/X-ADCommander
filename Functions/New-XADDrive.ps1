@@ -64,7 +64,7 @@ function New-XADDrive {
                 $DomainControllers
             )
             $PSCmdlet.ThrowTerminatingError($ErrorRecord)
-            return
+            
         }
         try {
             $DomainRoot = (Get-ADDomain -Server $Server -Credential $Credential).DistinguishedName
@@ -74,14 +74,7 @@ function New-XADDrive {
             }
         }
         catch {
-            $ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
-                [System.Management.Automation.DriveNotFoundException]::new("Unable to create an Active Directory drive for server $Server. $($_.Exception.message)"),
-                'ADDriveCreationFailed',
-                [System.Management.Automation.ErrorCategory]::OperationStopped,
-                $Server
-            )
-            $PSCmdlet.ThrowTerminatingError($ErrorRecord)
-            Return
+            $PSCmdlet.ThrowTerminatingError($_)
         }
         $ADDrive
     }

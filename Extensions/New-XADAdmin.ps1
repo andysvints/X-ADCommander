@@ -36,10 +36,10 @@ function New-XADAdmin {
     }
     try {
         New-ADUser @UserParams -ErrorAction Stop
-        Write-Host "Account creation succeeded for $Username in $Domain Domain." -ForegroundColor Green
+        Write-Host "Account creation succeeded for $Username in $Domain domain." -ForegroundColor Green
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Host "Account creation failed for $Username in $Domain Domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+        Write-Host "Account creation failed for $Username in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }
