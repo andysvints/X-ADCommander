@@ -1,10 +1,7 @@
 
 function Reset-XADUserPassword {
     param ([Parameter(Mandatory = $true)][string]$Domain)
-    if (-not (Test-XADDrive -Name $Domain)) {
-        Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
-        return
-    }
+
     $Username = read-host -Prompt "Username"
     Write-Host "`nFetching account details for $Username in $Domain domain..............`n" -ForegroundColor Yellow
 
@@ -21,7 +18,7 @@ function Reset-XADUserPassword {
     $Password = read-host -Prompt "Password" -AsSecureString
     $Confirm = Read-Host -Prompt "Are you sure you want to reset the password for $Username in $Domain domain?`n Type 'y' or 'Y' to continue"
     if ($Confirm -notin 'y', 'Y') {
-        continue
+        return
     }
     Write-Host "`nSetting password for $Username in $Domain domain..............`n" -ForegroundColor Yellow
     try {

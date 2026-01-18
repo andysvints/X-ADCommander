@@ -28,12 +28,12 @@ $DomainControllerIP = [ordered]@{}
 $Domain_Controllers_IPs_CSV | ForEach-Object { $DomainControllerIP[$_.Label] = $_.IP }
 $Options = [string[]]$DomainControllerIP.keys
 
-:MainMenuExitLabel
+:MainMenuExit
 while ($true) {
     #Clear-Host -Force
     $Option = Show-XADMenu -Title 'Domains' -Choices $Options
     if ($Option -eq 0) { 
-        break MainMenuExitLabel 
+        break MainMenuExit 
     }
     $SelectedLabel = $Options[$Option - 1]
     # Determine if we can use an existing AD drive
@@ -52,8 +52,8 @@ while ($true) {
     }
     if (-not $ADDrive) {
         Write-Host "`nConnecting to domain controller $Server in $SelectedLabel.............." -ForegroundColor Yellow
-        $Credential = Get-Credential -Message "Enter credential for domain: $SelectedLabel"
-        :CreateADDriveLabel
+        $Credential = Get-Credential -Message "Enter credential for the domain in $SelectedLabel"
+        :CreateADDrive
         do {
             try {
             $Domain = New-XADDrive -DomainControllers $Server -Credential $Credential -NoConnectionTest -ErrorAction Stop | Select-Object -ExpandProperty Name
@@ -66,13 +66,13 @@ while ($true) {
                         "A drive with name $($ErrorRecord.TargetObject) already exists. You'll be prompted to confirm deleting the $($ErrorRecord.TargetObject) drive."
                         $Confirm = Read-Host -Prompt "`nType 'y' or 'Y' if you confirm deleting drive $($ErrorRecord.TargetObject) or type anything else to keep it and to return to the domain selection menu again"
                         if ($Confirm -notin 'y', 'Y') {
-                            continue MainMenuExitLabel
+                            continue MainMenuExit
                         }
                         else {
                             Set-location $ENV:USERPROFILE
                             Push-Location
                             Remove-PSDrive -Name $ErrorRecord.TargetObject -Force
-                            continue CreateADDriveLabel
+                            continue CreateADDrive
                         }
                     }
                     default{
@@ -80,9 +80,9 @@ while ($true) {
                         "AD drive creation failed for $($Credential.Username) in $SelectedLabel. ErrorDetails: $ErrorDetails"
                         $Confirm = Read-Host -Prompt "`nType 'y' or 'Y' if you want to return to the domain selection menu again or type anything else to exit"
                         if ($Confirm -notin 'y', 'Y') {
-                            break MainMenuExitLabel
+                            break MainMenuExit
                         }
-                        continue MainMenuExitLabel
+                        continue MainMenuExit
                     }
                 }
             }
@@ -98,24 +98,32 @@ while ($true) {
     $Level_2_Menus = [ordered]@{}
     $Level_2_Menus_CSV | ForEach-Object { $Level_2_Menus[$_.Menu_ID] = $_.Menu_Name }
     $Actions = [string[]]$Level_2_Menus.Values
-    :SubMenuExitLabel
+    :SubMenuExit
     while ($true) {
         #Clear-host -Force
-        $SelectedMenuID = Show-XADMenu -Title "Actions for Domain:$SelectedLabel" -Choices $Actions
-        if ($SelectedMenuID -eq 0) { break MainMenuExitLabel }
+        $SelectedMenuID = Show-XADMenu -Title "Actions for domain: $Domain" -Choices $Actions
+        if ($SelectedMenuID -eq 0) { break MainMenuExit }
         $SelectedMenu = $Level_2_Menus[$SelectedMenuID - 1]
-        do { 
+        do {
             switch ($SelectedMenuID) {
                 1 { Reset-XADUserPassword $Domain}
                 2 { New-XADAdmin $Domain}
                 3 { Add-XADGroupMember $Domain}
                 4 { New-XADServiceAccount $Domain}
-                5 { break SubMenuExitLabel }
-                6 { $UsedADDrives.Remove($Domain) | Out-Null; break MainMenuExitLabel}
+                5 { break SubMenuExit }
+                6 { $UsedADDrives.Remove($Domain) | Out-Null; break MainMenuExit}
                 default { Write-Warning "Unknown Option: $SelectedMenuID" }
             }
+            # If the AD drive was found invalid in any called function above, start over from domains menu
+            if ( -not (Test-XADDrive $Domain) ) {
+                Write-Host "Connection with the domain $Domain is no longer valid, you'll be taken to domains menu to start over again" -ForegroundColor Red                
+                Set-Location $Env:USERPROFILE
+                Remove-PSDrive -Name $Domain -Force
+                $UsedADDrives.Remove($Domain)
+                break SubMenuExit
+            }
         } until (
-            ((read-host -Prompt "`nType 'y' or 'Y' if you want to use `"$SelectedMenu`" again in $SelectedLabel domain or type anything else to go back to Actions menu") -notin 'y', 'Y')
+            ((read-host -Prompt "`nType 'y' or 'Y' if you want to use `"$SelectedMenu`" again in $Domain or type anything else to go back to Actions menu") -notin 'y', 'Y')
         )
     }
 }

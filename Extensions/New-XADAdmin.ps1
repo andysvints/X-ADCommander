@@ -1,10 +1,7 @@
 
 function New-XADAdmin {
     param ([Parameter(Mandatory = $true)][string]$Domain)
-    if (-not (Test-XADDrive -Name $Domain)) {
-        Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
-        exit
-    }
+
     $DomainDNRoot = (Get-ADDomain).DistinguishedName
     $DomainDNSSuffix = (Get-ADDomain).DNSRoot
 
