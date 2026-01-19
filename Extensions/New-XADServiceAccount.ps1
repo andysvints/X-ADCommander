@@ -43,13 +43,13 @@ function New-XADServiceAccount {
         Enabled              = $true
         PasswordNeverExpires = $true
     }
-    Write-Host "`nCreating service account $Username in $Domain domain under $Path..............`n" -ForegroundColor Yellow
+    Write-Host "`nCreating service account '$Username' in $Domain domain under $Path..............`n" -ForegroundColor Yellow
     try {
         New-ADUser @NewUserParams -ErrorAction Stop
-        Write-Host "Account creation succeeded for $Username in $Domain domain." -ForegroundColor Green
+        Write-Host "Account creation succeeded for '$Username' in $Domain domain." -ForegroundColor Green
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Host "Service Account creation failed for $Username in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+        Write-Host "Service Account creation failed for '$Username' in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }

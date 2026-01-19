@@ -17,7 +17,7 @@ function New-XADAdmin {
     $Path = $Path.Trim()
     $Path = "OU=" + $Path + "," + $DomainDNRoot
 
-    Write-Host "`nCreating new admin user $Username in $Domain under $Path..............`n" -ForegroundColor Yellow
+    Write-Host "`nCreating new admin user '$Username' in $Domain under $Path..............`n" -ForegroundColor Yellow
     $UserParams = @{
         Name              = $UserName
         GivenName         = $UserName
@@ -33,10 +33,10 @@ function New-XADAdmin {
     }
     try {
         New-ADUser @UserParams -ErrorAction Stop
-        Write-Host "Account creation succeeded for $Username in $Domain domain." -ForegroundColor Green
+        Write-Host "Account creation succeeded for '$Username' in $Domain domain." -ForegroundColor Green
     }
     catch {
         $ErrorDetails = $_.Exception.Message
-        Write-Host "Account creation failed for $Username in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+        Write-Host "Account creation failed for '$Username' in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
 }
