@@ -1,7 +1,7 @@
 function Start-XADCommander {
 [cmdletbinding()]
 param()
-$ADDrive = $Domain = $ExistingADDrive = $CurrentLocation = $CurrentDriveName = ''
+$ExistingADDrive = $CurrentLocation = $CurrentDriveName = ''
 
 $ParentFolder = Split-Path $PSScriptRoot
 $DataFolder =Join-Path $ParentFolder 'Data'
@@ -31,6 +31,7 @@ $Options = [string[]]$DomainControllerIP.keys
 :MainMenuExit
 while ($true) {
     #Clear-Host -Force
+    $ADDrive = $Domain = ''
     $Option = Show-XADMenu -Title 'Domains' -Choices $Options
     if ($Option -eq 0) { 
         break MainMenuExit 
@@ -38,10 +39,12 @@ while ($true) {
     $SelectedLabel = $Options[$Option - 1]
     # Determine if we can use an existing AD drive
     $Server = $DomainControllerIP.$SelectedLabel
+    write-Verbose "SelectedLabel: $SelectedLabel, Corresponding Server: $Server"
     if ($Server -in $UsedADDrives.Values) {
         foreach ($EnumUsedADDrives in $UsedADDrives.GetEnumerator()) {
             if ($EnumUsedADDrives.Value -eq $Server) {
                 $ExistingADDrive = $EnumUsedADDrives.Key
+                Write-Verbose "Found existing AD drive $ExistingADDrive for server $Server"
             }
         }
         # Check if existing AD drive authentication with the domain is still valid
