@@ -41,10 +41,7 @@ A PowerShell-based, extensible management framework for cross-forest Active Dire
 ```powershell
 function Verb-XADNoun {
     param ([Parameter(Mandatory = $true)][string]$Domain)
-    if (-not (Test-XADDrive -Name $Domain)) {
-        Write-Host "Connection with the domain $Domain is no longer valid, exit and start over again" -ForegroundColor Red
-        exit
-    }
+
     ## Get user input here if needed
       Write-Host "`n(Describe action being done) in $Domain Domain..............`n" -ForegroundColor Yellow
 
