@@ -1,7 +1,7 @@
 function Start-XADCommander {
 [cmdletbinding()]
 param()
-$ExistingADDrive = $CurrentLocation = $CurrentDriveName = ''
+$ExistingADDrive = $CurrentDriveName = ''
 
 $ParentFolder = Split-Path $PSScriptRoot
 $DataFolder =Join-Path $ParentFolder 'Data'
@@ -16,10 +16,9 @@ $UsedADDrives = @{}
 # store existing AD drive names that match the domain controller and IPs in a hashtable
 Get-PSDrive | 
     Where-Object { $_.Provider -match 'ActiveDirectory' -and $_.Server -in $AllIPs -and ($_.Name -eq $_.RootWithoutAbsolutePathToken.Split(',')[0].Substring(3)) } |
-    Select-Object Name, Server | ForEach-Object { $UsedADDrives.Add($_.Name, $_.Server) }
+    Select-Object Name, Server | ForEach-Object { $UsedADDrives[$_.Name] = $_.Server } 
 
-$CurrentLocation = (Get-Location).Path
-$CurrentDriveName = $CurrentLocation.Replace(':\','')
+$CurrentDriveName = (Get-Location).Drive.Name
 if (($UsedADDrives.Count -gt 0) -and $UsedADDrives.ContainsKey($CurrentDriveName)) {
     Set-location $ENV:USERPROFILE
 }
@@ -72,8 +71,11 @@ while ($true) {
                             continue MainMenuExit
                         }
                         else {
-                            Set-location $ENV:USERPROFILE
-                            Push-Location
+                            if ((Get-Location -Stack).Path[0].StartsWith($ErrorRecord.TargetObject)){
+                                Pop-Location
+                                Set-location $ENV:USERPROFILE
+                                Push-Location
+                            }
                             Remove-PSDrive -Name $ErrorRecord.TargetObject -Force
                             continue CreateADDrive
                         }
@@ -91,7 +93,7 @@ while ($true) {
             }
             $ADDrive = "$($Domain):" 
             Write-Verbose "UsedADDrives: $($UsedADDrives.Keys)" 
-            $UsedADDrives.Add($Domain,$Server)
+            $UsedADDrives[$Domain] = $Server
             Write-Verbose "NewADDrive: $Domain"
         } until( $ADDrive )
     }

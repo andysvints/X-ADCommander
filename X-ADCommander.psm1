@@ -4,16 +4,16 @@ $script:DCIPsCSVPath   = Join-Path $script:ModuleDataPath "Domain_Controllers_IP
 
 # Load all function scripts from all folders containing functions when the module is imported
 
-$FunctionsFolders = @('\Functions\', '\Internal\', '\Extensions\')
+$FunctionsFolders = @('Functions', 'Internal', 'Extensions')
 
 foreach ($Folder in $FunctionsFolders) {
     $JoinedPath = Join-Path $PSScriptRoot $Folder
-    $JoinedPath
-    $FunctionsList = Get-ChildItem -Path $JoinedPath -Name
+    $FunctionsList = Get-ChildItem -Path $JoinedPath -Name -ErrorAction Stop
     foreach ($Function in $FunctionsList) {
         . ($JoinedPath + $Function)
     }
 }
+
 
 Initialize-XADConfig
 
