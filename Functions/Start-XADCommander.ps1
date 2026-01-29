@@ -1,6 +1,9 @@
 function Start-XADCommander {
-[cmdletbinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
 param()
+begin{}
+process{
+	if ($pscmdlet.ShouldProcess("computer")){
 $ExistingADDrive = $CurrentDriveName = ''
 
 $ParentFolder = Split-Path $PSScriptRoot
@@ -141,4 +144,7 @@ $UsedADDrives.Keys |
             Remove-PSDrive $_ -ErrorAction Continue 
     }
 Return
+	}
+}
+end{}
 }

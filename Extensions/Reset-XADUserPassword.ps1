@@ -1,7 +1,10 @@
 
 function Reset-XADUserPassword {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param ([Parameter(Mandatory = $true)][string]$Domain)
-
+    begin{}
+    process{
+    	if ($pscmdlet.ShouldProcess("domain - $Domain")){
     $Username = read-host -Prompt "Username"
     Write-Host "`nFetching account details for '$Username' in $Domain domain..............`n" -ForegroundColor Yellow
 
@@ -29,4 +32,7 @@ function Reset-XADUserPassword {
         $ErrorDetails = $_.Exception.Message
         Write-Host "Password reset failed for '$Username' in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
+    	}
+    }
+    end{}
 }

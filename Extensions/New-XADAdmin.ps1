@@ -1,7 +1,10 @@
 
 function New-XADAdmin {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param ([Parameter(Mandatory = $true)][string]$Domain)
-
+    begin{}
+    process{
+    	if ($pscmdlet.ShouldProcess("domain - $Domain")){
     $DomainDNRoot = (Get-ADDomain).DistinguishedName
     $DomainDNSSuffix = (Get-ADDomain).DNSRoot
 
@@ -39,4 +42,7 @@ function New-XADAdmin {
         $ErrorDetails = $_.Exception.Message
         Write-Host "Account creation failed for '$Username' in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
     }
+    	}
+    }
+    end{}
 }
