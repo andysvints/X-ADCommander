@@ -53,10 +53,15 @@ function Show-XADMenu {
     catch {
         $SelectedChoice = 0
         $SelectedChoice
-        Return
+        return
     }
-    if  ($SelectedChoice -lt 1 -or $SelectedChoice -gt $Choices.Count){
+    if ($SelectedChoice -lt 1 -or $SelectedChoice -gt $Choices.Count) {
         $SelectedChoice = 0
     }
     $SelectedChoice
 }
+
+
+
+
+

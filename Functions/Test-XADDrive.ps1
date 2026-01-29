@@ -34,7 +34,7 @@ function Test-XADDrive {
         [string]$Name
     )
     
-    PROCESS {
+    process {
         try {
             Write-Verbose "Checking if AD drive $Name exists"
             Get-PSDrive -Name $Name -PSProvider ActiveDirectory -ErrorAction Stop | Out-Null
@@ -50,3 +50,9 @@ function Test-XADDrive {
         }
     }
 }
+
+
+
+
+
+

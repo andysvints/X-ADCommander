@@ -44,7 +44,7 @@ function New-XADDrive {
         )]
         [switch]$NoConnectionTest = $false
     )
-    PROCESS {
+    process {
         foreach ($DomainController in $DomainControllers) {
             if ($NoConnectionTest) {
                 $Server = $DomainController
@@ -56,7 +56,7 @@ function New-XADDrive {
                 break
             }
         }
-        if (-Not $Server) {
+        if (-not $Server) {
             $ErrorRecord = [System.Management.Automation.ErrorRecord]::new(
                 [System.Management.Automation.DriveNotFoundException]::new("Unable to create an Active Directory drive because none of the supplied domain controllers was reachable."),
                 'ADDriveCreationFailed',
@@ -79,3 +79,9 @@ function New-XADDrive {
         $ADDrive
     }
 }
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 BeforeAll {
-    . $PSCommandPath.Replace('.Tests.ps1','.ps1')
+    . $PSCommandPath.Replace('.Tests.ps1', '.ps1')
     . $PSScriptRoot\New-XADDrive.ps1
 }
 Describe "Test-XADDrive" {
@@ -24,3 +24,8 @@ Describe "Test-XADDrive" {
         }
     }
 }
+
+
+
+
+

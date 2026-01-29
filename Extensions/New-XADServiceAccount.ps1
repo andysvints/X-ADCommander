@@ -1,61 +1,67 @@
 function New-XADServiceAccount {
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param ([Parameter(Mandatory = $true)][string]$Domain)
-    begin{}
-    process{
-    	if ($pscmdlet.ShouldProcess("domain - $Domain")){
-    $DomainDNRoot = (Get-ADDomain).DistinguishedName
-    $DomainDNSSuffix = (Get-ADDomain).DNSRoot
+    begin {}
+    process {
+        if ($pscmdlet.ShouldProcess("domain - $Domain")) {
+            $DomainDNRoot = (Get-ADDomain).DistinguishedName
+            $DomainDNSSuffix = (Get-ADDomain).DNSRoot
 
-    $OUPath = Read-Host -Prompt "Enter the name of the existing main OU (default: Service Accounts)"
-    if ([string]::IsNullOrWhiteSpace($OUPath)) {
-        $OUPath = "Service Accounts"
-    }
-    $OUPath = $OUPath.Trim()
-    $OUPath = "OU=" + $OUPath + "," + $DomainDNRoot
-    do {
-        $OUName = Read-Host -Prompt "Enter the name of the new sub OU"
-    } while ([string]::IsNullOrWhiteSpace($OUName))
-    $OUName = $OUName.Trim()
-    Write-Host "`nCreating $OUName OU under $OUPath in $Domain domain..............`n" -ForegroundColor Yellow
-    try {
-        New-ADOrganizationalUnit -Name $OUName -Path $OUPath -ErrorAction Stop
-        Write-Host "OU creation succeeded for OU $OUName in $Domain domain." -ForegroundColor Green
-    }
-    catch {
-        $ErrorDetails = $_.Exception.Message
-        Write-Host "OU creation failed for $OUName in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
-    }
-    do {
-        $Username = read-host -Prompt "Service Account Username"
-    } while ([string]::IsNullOrWhiteSpace($Username))
+            $OUPath = Read-Host -Prompt "Enter the name of the existing main OU (default: Service Accounts)"
+            if ([string]::IsNullOrWhiteSpace($OUPath)) {
+                $OUPath = "Service Accounts"
+            }
+            $OUPath = $OUPath.Trim()
+            $OUPath = "OU=" + $OUPath + "," + $DomainDNRoot
+            do {
+                $OUName = Read-Host -Prompt "Enter the name of the new sub OU"
+            } while ([string]::IsNullOrWhiteSpace($OUName))
+            $OUName = $OUName.Trim()
+            Write-Host "`nCreating $OUName OU under $OUPath in $Domain domain..............`n" -ForegroundColor Yellow
+            try {
+                New-ADOrganizationalUnit -Name $OUName -Path $OUPath -ErrorAction Stop
+                Write-Host "OU creation succeeded for OU $OUName in $Domain domain." -ForegroundColor Green
+            }
+            catch {
+                $ErrorDetails = $_.Exception.Message
+                Write-Host "OU creation failed for $OUName in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+            }
+            do {
+                $Username = Read-Host -Prompt "Service Account Username"
+            } while ([string]::IsNullOrWhiteSpace($Username))
     
-    $Password = read-host -Prompt "Service Account Password" -AsSecureString
-    $Description = read-host -Prompt "Service Account Description"
-    $Path = "OU=" + $OUName + "," + $OUPath;
-    $NewUserParams = @{
-        Name                 = $Username
-        GivenName            = $Username
-        Surname              = ""
-        UserPrincipalName    = "$Username@$DomainDNSSuffix"
-        SamAccountName       = $Username
-        Description          = $Description
-        DisplayName          = $Username
-        Path                 = $Path
-        AccountPassword      = $Password
-        Enabled              = $true
-        PasswordNeverExpires = $true
+            $Password = Read-Host -Prompt "Service Account Password" -AsSecureString
+            $Description = Read-Host -Prompt "Service Account Description"
+            $Path = "OU=" + $OUName + "," + $OUPath;
+            $NewUserParams = @{
+                Name                 = $Username
+                GivenName            = $Username
+                Surname              = ""
+                UserPrincipalName    = "$Username@$DomainDNSSuffix"
+                SamAccountName       = $Username
+                Description          = $Description
+                DisplayName          = $Username
+                Path                 = $Path
+                AccountPassword      = $Password
+                Enabled              = $true
+                PasswordNeverExpires = $true
+            }
+            Write-Host "`nCreating service account '$Username' in $Domain domain under $Path..............`n" -ForegroundColor Yellow
+            try {
+                New-ADUser @NewUserParams -ErrorAction Stop
+                Write-Host "Account creation succeeded for '$Username' in $Domain domain." -ForegroundColor Green
+            }
+            catch {
+                $ErrorDetails = $_.Exception.Message
+                Write-Host "Service Account creation failed for '$Username' in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
+            }
+        }
     }
-    Write-Host "`nCreating service account '$Username' in $Domain domain under $Path..............`n" -ForegroundColor Yellow
-    try {
-        New-ADUser @NewUserParams -ErrorAction Stop
-        Write-Host "Account creation succeeded for '$Username' in $Domain domain." -ForegroundColor Green
-    }
-    catch {
-        $ErrorDetails = $_.Exception.Message
-        Write-Host "Service Account creation failed for '$Username' in $Domain domain. ErrorDetails: $ErrorDetails" -ForegroundColor Red
-    }
-    	}
-    }
-    end{}
+    end {}
 }
+
+
+
+
+
+
