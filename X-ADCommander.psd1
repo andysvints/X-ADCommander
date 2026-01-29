@@ -30,7 +30,7 @@
     Copyright            = '(c) 2025 Mhd Samer Sawas. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description          = 'Cross-forest AD administration made simple, scriptable, and extensible.'
+    Description          = 'PowerShell-based, extensible management framework designed to make cross-forest Active Directory administration simple, scriptable, and efficient. It provides an interactive text-menu console that lets administrators browse and manage multiple AD forests and domains from one unified interface. The module also exposes core functions (like New-XADDrive and Test-XADDrive) that can be used directly in custom scripts, and it supports easy extension with new management tasks.'
 
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion    = '5.1'
